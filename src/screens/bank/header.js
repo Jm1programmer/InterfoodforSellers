@@ -1,9 +1,44 @@
 import React, {useState, useEffect} from "react";
 import { Text, StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import Icon from 'react-native-vector-icons/Entypo'
-
+import firestore from '@react-native-firebase/firestore';
 export default function Header() {
-    const preco = 2564.12;
+
+    const [data, setData] = useState([])
+    const tempDoc = []
+    const arr = data;
+    let preco = 0;
+    for(let i = 0; i < arr.length; i++) {
+        preco += arr[i];
+    }
+  
+    
+    console.log(data)
+    function getMarkers() {
+        const events =  firestore().collection('foodRequests')
+        events.get().then((querySnapshot) => {
+           
+            querySnapshot.forEach((doc) => {
+               tempDoc.push( doc.data().preco )
+              
+            })
+           
+         
+          
+          
+         }
+         
+         )
+       }
+
+       
+
+       useState(() => {
+            getMarkers()
+            setData(tempDoc)
+            
+       }, [])
+  
     const Preco = preco.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})
     const [imageUrl, setImageUrl] = useState(undefined);
 
